@@ -18,3 +18,8 @@ It provides a RESTful API for handling various operations such as adding new rec
 #### In-Memory Database:
 - Store album information in an in-memory database.
 - This will allow data to be reset on startup, making it easier to test and develop without persistent storage.
+
+#### Controllers
+- Album Controller handles album related data
+	- GET List all albums
+	- POST 
