@@ -8,10 +8,16 @@ namespace RecordShopBackend.Model.Database
 {
     public class RecordStoreDBContext : DbContext
     {
+        private static string? connectionString = System.Configuration.ConfigurationManager.AppSettings["CONNECTION_STRING"];
+
         public DbSet<Album> Albums { get; set; }
         public DbSet<Artist> Artists { get; set; }
 
         public RecordStoreDBContext(DbContextOptions<RecordStoreDBContext> options) : base(options) { }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(connectionString);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -34,12 +34,10 @@ namespace RecordShopBackend
                     options.UseSqlite(connection);
                 });
             } else
-            {
-                var connection = new SqlConnection(connectionString);
-                connection.Open();
+            { 
                 builder.Services.AddDbContext<RecordStoreDBContext>(options =>
                 {
-                    options.UseSqlServer(connection);
+                    options.UseSqlServer();
                 });
 
             }
