@@ -1,6 +1,9 @@
+using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using RecordShopBackend.Model.Database;
+using RecordShopBackend.Model.Repository;
+using RecordShopBackend.Model.Service;
 
 namespace RecordShopBackend
 {
@@ -13,31 +16,53 @@ namespace RecordShopBackend
 
             // Add services to the container.
 
-            builder.Services.AddDbContext<RecordStoreDBContext>(options =>
-            {
-                var connection = new SqliteConnection(connectionString);
-                connection.Open();
-                options.UseSqlServer(connection);
-            });
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddScoped<IAlbumService, AlbumService>();
+            builder.Services.AddScoped<IAlbumModel, AlbumModel>();
+
+            
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") is "Development")
+            {
+                var connection = new SqliteConnection(connectionString);
+                connection.Open();
+
+                builder.Services.AddDbContext<RecordStoreDBContext>(options =>
+                {
+                    options.UseSqlite(connection);
+                });
+            } else
+            {
+                var connection = new SqlConnection(connectionString);
+                connection.Open();
+                builder.Services.AddDbContext<RecordStoreDBContext>(options =>
+                {
+                    options.UseSqlServer(connection);
+                });
+
+            }
+
             var app = builder.Build();
 
+            
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+
+                using (var scope = app.Services.CreateScope())
+                {
+                    var db = scope.ServiceProvider.GetRequiredService<RecordStoreDBContext>();
+                    db.Database.EnsureCreated();
+                }
             }
 
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 

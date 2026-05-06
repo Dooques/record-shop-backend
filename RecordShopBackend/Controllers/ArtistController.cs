@@ -8,5 +8,18 @@ namespace RecordShopBackend.Controllers
     public class ArtistController(IArtistService artistService) : ControllerBase
     {
         IArtistService _artistService = artistService;
+
+        [HttpGet]
+        public IActionResult GetAllArtists()
+        {
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public IActionResult GetArtist(int id)
+        {
+            return Ok();
+        }
     }
 }
