@@ -52,7 +52,7 @@ namespace RecordShopBackend.Model.Repository
 
             if (albumToUpdate.Title != album.Title) { albumToUpdate.Title = album.Title ?? albumToUpdate.Title; }
             if (albumToUpdate.Artist != album.Artist) { albumToUpdate.Artist = album.Artist ?? albumToUpdate.Artist; }
-            if (albumToUpdate.ReleaseYear != album.ReleaseYear) { albumToUpdate.ReleaseYear = album.ReleaseYear ?? 0; }
+            if (albumToUpdate.ReleaseYear != album.ReleaseYear) { albumToUpdate.ReleaseYear = album.ReleaseYear ?? albumToUpdate.ReleaseYear; }
             if (albumToUpdate.Genre != album.Genre) { albumToUpdate.Genre = album.Genre ?? albumToUpdate.Genre; }
 
             _db.SaveChanges();

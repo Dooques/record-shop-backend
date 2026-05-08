@@ -1,6 +1,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using RecordShopBackend.Model.Database;
 using RecordShopBackend.Model.Repository;
 using RecordShopBackend.Model.Service;
@@ -9,8 +10,7 @@ namespace RecordShopBackend
 {
     public class Program
     {
-        private static string? connectionString = System.Configuration.ConfigurationManager.AppSettings["CONNECTION_STRING"];
-        public static void Main(string[] args)
+            public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -24,23 +24,23 @@ namespace RecordShopBackend
             builder.Services.AddScoped<IAlbumModel, AlbumModel>();
 
             
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") is "Development")
+            builder.Services.AddDbContext<RecordStoreDBContext>(options =>
             {
-                var connection = new SqliteConnection(connectionString);
-                connection.Open();
-
-                builder.Services.AddDbContext<RecordStoreDBContext>(options =>
+                var _connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") is "Development")
                 {
+                    Console.WriteLine($"Connection: ${_connectionString}");
+                    var connection = new SqliteConnection(_connectionString);
+                    connection.Open();
                     options.UseSqlite(connection);
-                });
-            } else
-            { 
-                builder.Services.AddDbContext<RecordStoreDBContext>(options =>
+                }
+                else
                 {
-                    options.UseSqlServer();
-                });
+                    Console.WriteLine($"Connection: ${_connectionString}");                    
+                    options.UseSqlServer(_connectionString);
+                }
+            });
 
-            }
 
             var app = builder.Build();
 

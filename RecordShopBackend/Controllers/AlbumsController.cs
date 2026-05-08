@@ -7,7 +7,7 @@ namespace RecordShopBackend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AlbumController(IAlbumService albumService) : ControllerBase
+    public class AlbumsController(IAlbumService albumService) : ControllerBase
     {
         IAlbumService _albumService = albumService;
 
@@ -38,6 +38,7 @@ namespace RecordShopBackend.Controllers
         }
 
         [HttpDelete]
+        [Route("{id}")]
         public IActionResult DeleteAlbum(int id)
         {
             _albumService.DeleteAlbum(id);

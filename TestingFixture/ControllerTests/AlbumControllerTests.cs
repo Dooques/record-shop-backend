@@ -18,13 +18,13 @@ namespace TestSuite.ControllerTests
     internal class AlbumControllerTests
     {
         private Mock<IAlbumService> _albumService;
-        private AlbumController _albumController;
+        private AlbumsController _albumController;
 
         [SetUp]
         public void SetUp()
         {
             _albumService = new Mock<IAlbumService>();
-            _albumController = new AlbumController(_albumService.Object);
+            _albumController = new AlbumsController(_albumService.Object);
         }
 
         [Test]
