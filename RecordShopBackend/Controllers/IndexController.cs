@@ -3,7 +3,7 @@
 namespace RecordShopBackend.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/")]
     public class IndexController
     {
         [HttpGet]

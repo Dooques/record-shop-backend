@@ -6,7 +6,7 @@ using RecordShopBackend.Model.Service;
 namespace RecordShopBackend.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class AlbumsController(IAlbumService albumService) : ControllerBase
     {
         IAlbumService _albumService = albumService;
